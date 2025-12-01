@@ -31,24 +31,6 @@ library advent-of-code-solutions
   exposed-modules:
     Lib.Solution
     Solutions.Day1
-    Solutions.Day2
-    Solutions.Day3
-    Solutions.Day4
-    Solutions.Day5
-    Solutions.Day6
-    Solutions.Day7
-    Solutions.Day8
-    Solutions.Day9
-    Solutions.Day10
-    Solutions.Day11
-    Solutions.Day12
-    Solutions.Day13
-    Solutions.Day14
-    Solutions.Day16
-    Solutions.Day17
-    Solutions.Day18
-    Solutions.Day22
-    Solutions.Day23
     Solutions.DayX
 
   other-modules:

@@ -1,30 +1,21 @@
-{-# LANGUAGE TupleSections #-}
-
 module Solutions.Day1 (solution) where
 
-import Data.IntMap (findWithDefault, fromListWith)
-import Data.List (sort)
-import Lib.Parser (Parser, intP)
-import Lib.Solution (Solution (..))
-import Text.Megaparsec (many)
-import Text.Megaparsec.Char (eol, space1)
+import Lib.Parser (Parser)
+import Lib.Solution
+import Text.Megaparsec.Char (string)
 
-solution :: Solution [(Int, Int)] Int Int
+solution :: Solution Input String String
 solution = Solution 1 parser part1 part2
 
-part1 :: [(Int, Int)] -> IO Int
-part1 rows = return $ sum $ zipWith (\a b -> abs (a - b)) (sort $ fst <$> rows) (sort $ snd <$> rows)
+part1 :: Input -> IO String
+part1 = todo
 
-part2 :: [(Int, Int)] -> IO Int
-part2 rows = return $ sum $ (\a -> a * findWithDefault 0 a counts) . fst <$> rows
- where
-  counts = fromListWith (+) $ (,1) <$> (snd <$> rows)
+part2 :: Input -> IO String
+part2 = todo
 
-parser :: Parser [(Int, Int)]
-parser = many rowP
- where
-  rowP :: Parser (Int, Int)
-  rowP = do
-    a <- intP <* space1
-    b <- intP <* eol
-    return (a, b)
+type Input = String
+parser :: Parser Input
+parser = string "todo"
+
+test :: IO (String, String)
+test = testSolution solution

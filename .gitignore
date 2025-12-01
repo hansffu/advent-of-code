@@ -1,3 +1,4 @@
 .direnv
 dist-newstyle/
-input/
+input/*.txt
+!input/.gitkeep
