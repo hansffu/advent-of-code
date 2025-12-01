@@ -13,6 +13,8 @@ part1 = todo
 part2 :: Input -> IO String
 part2 = todo
 
+-- data Rot = R Int | L Int deriving (Show)
+
 type Input = String
 parser :: Parser Input
 parser = string "todo"

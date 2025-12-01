@@ -1,50 +1,58 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    haskell-flake.url = "github:srid/haskell-flake";
+    nixpkgs.url = "github:cachix/devenv-nixpkgs/rolling";
+    devenv.url = "github:cachix/devenv";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      flake-parts,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.systems.flakeExposed;
-      imports =
-        [ inputs.haskell-flake.flakeModule inputs.treefmt-nix.flakeModule ];
+      imports = [
+        inputs.treefmt-nix.flakeModule
+        inputs.devenv.flakeModule
+      ];
 
-      perSystem = { self', pkgs, config, ... }: {
+      perSystem =
+        {
+          self',
+          pkgs,
+          config,
+          ...
+        }:
+        {
+          devenv.shells.default = {
 
-        haskellProjects.default = {
+            name = "AoC";
+            languages.haskell = {
+              enable = true;
+              package = pkgs.haskell.compiler.ghc912;
+              cabal.enable = true;
+            };
+            treefmt = {
+              enable = true;
+              config.programs = {
+                nixpkgs-fmt.enable = true;
+                cabal-fmt.enable = true;
+                hlint.enable = true;
 
-          devShell = {
-            hlsCheck.enable = true;
+                ormolu = {
+                  enable = true;
+                  package = pkgs.haskellPackages.fourmolu;
+                };
+              };
+            };
           };
-          autoWire = [ "packages" "apps" "checks" ];
+          packages.default = self'.packages.advent-of-code;
         };
-        treefmt.config = {
-          projectRootFile = "flake.nix";
-
-          programs.ormolu.enable = true;
-          programs.nixpkgs-fmt.enable = true;
-          programs.cabal-fmt.enable = true;
-          programs.hlint.enable = true;
-
-          # We use fourmolu
-          programs.ormolu.package = pkgs.haskellPackages.fourmolu;
-        };
-
-        # haskell-flake doesn't set the default package, but you can do it here.
-        packages.default = self'.packages.advent-of-code;
-        devShells.default = pkgs.mkShell {
-          name = "AoC";
-          inputsFrom = [
-            config.haskellProjects.default.outputs.devShell
-            config.treefmt.build.devShell
-          ];
-          nativeBuildInputs = with pkgs; [ just ];
-        };
-      };
     };
 }
