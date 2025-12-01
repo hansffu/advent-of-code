@@ -1,4 +1,4 @@
-cabal-version: 3.0
+cabal-version: 3.8
 name:          advent-of-code
 version:       2024
 build-type:    Simple
@@ -6,7 +6,7 @@ build-type:    Simple
 common warnings
   ghc-options: -Wall
 
-library advent-of-code-solutions
+library solutions
   import:           warnings
   hs-source-dirs:   src
   build-depends:
@@ -51,7 +51,7 @@ executable advent-of-code
   hs-source-dirs:   app
   ghc-options:      -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-    , advent-of-code-solutions
+    , advent-of-code:solutions
     , base
 
   hs-source-dirs:   app
@@ -62,7 +62,7 @@ test-suite Tests
   main-is:          tests.hs
   hs-source-dirs:   test
   build-depends:
-    , advent-of-code-solutions
+    , advent-of-code:solutions
     , base
     , tasty
     , tasty-hunit
