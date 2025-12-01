@@ -49,7 +49,7 @@ addToQueue :: (Ord a) => [(Int, a)] -> St a ()
 addToQueue x = modify (\s -> s{queue = S.union (S.fromList x) s.queue})
 
 updateDistance :: (Ord a) => (Int, a) -> St a ()
-updateDistance (dist, pos) = modify (\s -> s{distances = M.insert pos dist $ s.distances})
+updateDistance (dist, pos) = modify (\s -> s{distances = M.insert pos dist s.distances})
 
 markAsVisited :: (Ord a) => a -> St a ()
 markAsVisited pos = modify (\s -> s{visited = S.insert pos s.visited})
@@ -57,4 +57,4 @@ markAsVisited pos = modify (\s -> s{visited = S.insert pos s.visited})
 getNotVisitedNeighbours :: (Ord a) => (a -> [(Int, a)]) -> a -> St a [(Int, a)]
 getNotVisitedNeighbours getNeighbours pos = do
   s <- get
-  return $ filter (\(_, x) -> not $ S.member x $ s.visited) $ getNeighbours pos
+  return $ filter (\(_, x) -> not $ S.member x s.visited) $ getNeighbours pos
