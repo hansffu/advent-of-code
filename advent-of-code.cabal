@@ -31,6 +31,7 @@ library solutions
   exposed-modules:
     Lib.Solution
     Solutions.Day1
+    Solutions.Day2
     Solutions.DayX
 
   other-modules:

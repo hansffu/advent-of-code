@@ -9,10 +9,11 @@
     };
   };
   outputs =
-    inputs@{ self
-    , nixpkgs
-    , flake-parts
-    , ...
+    inputs@{
+      self,
+      nixpkgs,
+      flake-parts,
+      ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.systems.flakeExposed;
@@ -22,10 +23,11 @@
       ];
 
       perSystem =
-        { self'
-        , pkgs
-        , config
-        , ...
+        {
+          self',
+          pkgs,
+          config,
+          ...
         }:
         {
           devenv.shells.default = {
@@ -49,6 +51,7 @@
                 };
               };
             };
+            packages = [ pkgs.haskellPackages.fourmolu ];
           };
           packages.default = self'.packages.advent-of-code;
         };
