@@ -5,11 +5,13 @@ module Lib.Array2d (
   replaceArr2D,
   Node,
   safe2dLookup,
+  unsafe2dLookup,
   findIndexes2d,
+  indexes2d,
 ) where
 
 import Data.Array (Array, listArray, (!), (//))
-import Data.Array.Base ((!?))
+import Data.Array.Base (bounds, (!?))
 import Data.Maybe (catMaybes)
 
 type Array2d a = Array Int (Array Int a)
@@ -41,8 +43,23 @@ safe2dLookup arr (y, x) = do
   item <- row !? x
   return (item, (y, x))
 
+unsafe2dLookup :: Array2d a -> (Int, Int) -> a
+unsafe2dLookup arr (y, x) =
+  let row = arr ! y
+      item = row ! x
+   in item
+
 findIndexes2d :: (a -> Bool) -> [[a]] -> [(a, (Int, Int))]
 findIndexes2d p rows = do
   (y, row) <- zip [0 ..] rows
   (x, a) <- zip [0 ..] row
   if p a then return (a, (y, x)) else []
+
+indexes2d :: Array2d a -> [(Int, Int)]
+indexes2d arr = do
+  let (rowStart, rowEnd) = bounds arr
+  rowIdx <- [rowStart .. rowEnd]
+  let row = arr ! rowIdx
+      (colStart, colEnd) = bounds row
+  colIdx <- [colStart .. colEnd]
+  return (rowIdx, colIdx)
