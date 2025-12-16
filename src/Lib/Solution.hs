@@ -1,4 +1,4 @@
-module Lib.Solution (Solution (..), Part, solve, testSolution, todo) where
+module Lib.Solution (Solution (..), Part, solve, testSolution, todo, todo') where
 
 import Lib.Parser (Parser)
 import Lib.TaskRunner (InputType (..), readInput)
@@ -7,6 +7,9 @@ type Part i o = i -> IO o
 
 todo :: i -> IO String
 todo = const $ return "TODO"
+
+todo' :: i -> IO Int
+todo' = const $ return 0
 
 data (Show o1, Show o2) => Solution i o1 o2 = Solution
   { day :: Int
