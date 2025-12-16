@@ -4,7 +4,9 @@ module Solutions.Day6 (solution, test) where
 
 import Text.Megaparsec.Char (asciiChar)
 
+import Data.Char (isSpace)
 import Data.List (transpose)
+import Data.List.Split (splitWhen)
 import Lib.Parser (Parser)
 import Lib.Solution
 import Lib.Utils (readInt)
@@ -14,9 +16,10 @@ solution :: Solution Input Int Int
 solution = Solution 6 parser part1 part2
 
 part1 :: Input -> IO Int
-part1 input = do
+part1 input' = do
   return $ sum results
  where
+  input = words <$> lines input'
   op :: [Int -> Int -> Int]
   op =
     ( \case
@@ -32,13 +35,29 @@ part1 input = do
   results = zipWith foldr1 op nums
 
 part2 :: Input -> IO Int
-part2 = todo'
+part2 raw = do
+  return $ sum results
+ where
+  input = transpose $ init $ lines raw
+  op :: [Int -> Int -> Int]
+  op =
+    ( \case
+        "+" -> (+)
+        "-" -> (-)
+        "*" -> (*)
+        -- "/" -> (/)
+        _ -> error "wrong symbol"
+    )
+      <$> last (words <$> lines raw)
 
-type Input = [[String]]
+  nums' = splitWhen (all isSpace) input
+  nums = (readInt <$>) <$> nums'
+  results = zipWith foldr1 op nums
+
+type Input = String
 parser :: Parser Input
-parser = do
-  a <- many asciiChar
-  return $ words <$> lines a
+parser =
+  many asciiChar
 
 test :: IO (Int, Int)
 test = testSolution solution
